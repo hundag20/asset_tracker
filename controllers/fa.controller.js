@@ -1,3 +1,5 @@
+const logger = require("./logger");
+
 const fa = async (req, res, model) => {
   try {
     //return select all rows
@@ -7,7 +9,7 @@ const fa = async (req, res, model) => {
       data: result,
     });
   } catch (err) {
-    console.log(err);
+    logger("error", err);
     return res.status(500).send({
       error: err,
     });
