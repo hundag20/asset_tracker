@@ -9,7 +9,7 @@ const roleAllowed = (role) => {
 exports.verify = async (req, res, next) => {
   const { _PORT } = require("../server");
   try {
-    let token = req.body.x_access_token;
+    let token = req.body?.x_access_token;
     if (!token) {
       return res.status(400).send({
         error: "no access token provided",
