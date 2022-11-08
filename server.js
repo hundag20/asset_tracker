@@ -13,8 +13,10 @@ const CompHard = require("./models/fa_CompHard.model");
 const All = require("./models/fa_All.model");
 const logger = require("./controllers/logger");
 const fs = require("fs");
+const { verify } = require("./controllers/auth.controller");
 
 const app = express();
+const _PORT = 3003;
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -30,41 +32,40 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //ra routes
-app.get("/v1/fixedplantequip", cors(), (req, res) =>
+app.post("/v1/fixedplantequip", verify, (req, res) =>
   fa(req, res, FixedPlantEquip)
 );
-app.get("/v1/fixturefitting", cors(), (req, res) =>
+app.post("/v1/fixturefitting", verify, (req, res) =>
   fa(req, res, FixtureFitting)
 );
-app.get("/v1/freestandequip", cors(), (req, res) =>
+app.post("/v1/freestandequip", verify, (req, res) =>
   fa(req, res, FreeStandEquip)
 );
-app.get("/v1/officeequipall", cors(), (req, res) => fa(req, res, OfficeEquip));
-app.get("/v1/pooling", cors(), (req, res) => fa(req, res, Pooling));
-app.get("/v1/vehicle", cors(), (req, res) => fa(req, res, Vehicle));
-app.get("/v1/compHard", cors(), (req, res) => fa(req, res, CompHard));
-app.get("/v1/all", cors(), (req, res) => fa(req, res, All));
+app.post("/v1/officeequipall", verify, (req, res) => fa(req, res, OfficeEquip));
+app.post("/v1/pooling", verify, (req, res) => fa(req, res, Pooling));
+app.post("/v1/vehicle", verify, (req, res) => fa(req, res, Vehicle));
+app.post("/v1/compHard", verify, (req, res) => fa(req, res, CompHard));
+app.post("/v1/all", verify, (req, res) => fa(req, res, All));
 
-app.get("/v1/logs", cors(), (req, res) => {
+app.get("/v1/logs", verify, (req, res) => {
   const content = fs.readFileSync(`./combined.log`, {
     encoding: "utf8",
     flag: "r",
   });
   res.send(content);
 });
-// app.get("/v1/env", cors(), (req, res) => {
+// app.get("/v1/env", verify, (req, res) => {
 //   const content = fs.readFileSync(`./.env.production`, {
 //     encoding: "utf8",
 //     flag: "r",
 //   });
 //   res.send(content);
 // });
-
-http.createServer(app).listen(3003, (err) => {
+http.createServer(app).listen(_PORT, (err) => {
   if (err) logger("error", err);
   else logger("info", "fa back-end running on 3003");
 });
-module.exports = app;
+module.exports = { app, _PORT };
 
 /*
 TODO: validate token on requests
