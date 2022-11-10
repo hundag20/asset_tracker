@@ -47,7 +47,7 @@ app.post("/v1/vehicle", verify, (req, res) => fa(req, res, Vehicle));
 app.post("/v1/compHard", verify, (req, res) => fa(req, res, CompHard));
 app.post("/v1/all", verify, (req, res) => fa(req, res, All));
 
-app.get("/v1/logs", verify, (req, res) => {
+app.get("/v1/logs", (req, res) => {
   const content = fs.readFileSync(`./combined.log`, {
     encoding: "utf8",
     flag: "r",
