@@ -5,6 +5,10 @@ const roleAllowed = (role) => {
   if (role === "admin" || role === "finance") return true;
   else return false;
 };
+const roleAllowed4service = (role) => {
+  if (role === "admin" || role === "service") return true;
+  else return false;
+};
 
 exports.verify = async (req, res, next) => {
   const { _PORT } = require("../server");
@@ -24,8 +28,14 @@ exports.verify = async (req, res, next) => {
       .then((response) => {
         // handle success
         req.userData = response.data.userData;
-        if (!roleAllowed(response.data.userData.role))
+        if (
+          req.originalUrl != "/v1/Out" &&
+          !roleAllowed(response.data.userData.role)
+        )
           throw "access to protected endpoint denied because the token provided is of a user with a disallowed role";
+        else if (!roleAllowed4service(response.data.userData.role))
+          throw "access to protected endpoint denied because the token provided is of a user with a disallowed role";
+
         logger("info", "access to protected endpoint granted");
         next();
       })
