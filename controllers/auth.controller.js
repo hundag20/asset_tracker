@@ -31,10 +31,14 @@ exports.verify = async (req, res, next) => {
         if (
           req.originalUrl != "/v1/Out" &&
           !roleAllowed(response.data.userData.role)
-        )
+        ) {
           throw "access to protected endpoint denied because the token provided is of a user with a disallowed role";
-        else if (!roleAllowed4service(response.data.userData.role))
+        } else if (
+          req.originalUrl === "/v1/Out" &&
+          !roleAllowed4service(response.data.userData.role)
+        ) {
           throw "access to protected endpoint denied because the token provided is of a user with a disallowed role";
+        }
 
         logger("info", "access to protected endpoint granted");
         next();
