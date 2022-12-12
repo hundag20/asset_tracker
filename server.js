@@ -11,8 +11,10 @@ const OfficeEquip = require("./models/fa_OfficeEquipAll.model");
 const Pooling = require("./models/fa_Pooling0.model");
 const CompHard = require("./models/fa_CompHard.model");
 const All = require("./models/fa_All.model");
+const Group = require("./models/fa_Group.model");
 const logger = require("./controllers/logger");
 const fs = require("fs");
+
 
 const app = express();
 
@@ -43,6 +45,7 @@ app.get("/v1/pooling", cors(), (req, res) => fa(req, res, Pooling));
 app.get("/v1/vehicle", cors(), (req, res) => fa(req, res, Vehicle));
 app.get("/v1/compHard", cors(), (req, res) => fa(req, res, CompHard));
 app.get("/v1/all", cors(), (req, res) => fa(req, res, All));
+app.get("/v1/Group", cors(), (req, res) => fa(req, res, Group));
 
 app.get("/v1/logs", cors(), (req, res) => {
   const content = fs.readFileSync(`./combined.log`, {
